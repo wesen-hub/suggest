@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LocalEnvStorage">
+    <option name="envName" value="localhost" />
+    <option name="localEnvList">
+      <list>
+        <LocalEnv>
+          <option name="envName" value="localhost" />
+          <option name="header">
+            <list>
+              <ParameterDetail />
+            </list>
+          </option>
+          <option name="preUrl" value="http://localhost:8080" />
+        </LocalEnv>
+      </list>
+    </option>
+  </component>
+</project>

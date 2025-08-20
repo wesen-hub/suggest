@@ -1,6 +1,5 @@
 package org.example.task;
 
-
 import jakarta.annotation.PostConstruct;
 import org.example.service.DocService;
 import org.example.service.ProductIndexService;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 /*
 * 每次服务启动同步词库到索引
-*
 * */
 @Component
 public class SyncWortask {
@@ -27,9 +25,10 @@ public class SyncWortask {
     @PostConstruct
     public void sync(){
         try {
+            System.out.println("删除索引中的旧数据...");
             productIndexService.deleteAllDocuments("products9");
             productIndexService.deleteAllDocuments("products5");
-            System.out.println("开始同步词库到索引");
+            System.out.println("开始同步词库到索引...");
             productIndexService.termIndexWordsFromFile(product_docPath);
             docService.bulkInsertFromFile(docPath);
             System.out.println("词库同步完成");
@@ -38,4 +37,5 @@ public class SyncWortask {
             System.err.println("词库同步失败: " + e.getMessage());
         }
     }
+    //
 }

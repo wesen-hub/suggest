@@ -25,7 +25,6 @@ public class SearchTermService {
     public boolean upsertTermWeight(String term) {
         try {
             // 1. 检查词条是否存在
-
             SearchRequest searchRequest = SearchRequest.of(s -> s
                     .index(INDEX_NAME)
                     .query(q -> q
@@ -36,9 +35,7 @@ public class SearchTermService {
                     )
                     .size(1)
             );
-
             SearchResponse<?> response = esClient.search(searchRequest, Map.class);
-
             if(response.hits().total().value() > 0&&response.hits().hits().size()==1) {
                 response.hits().hits().stream().forEach(hit -> {
                     System.out.println(((LinkedHashMap<String,Object>)hit.source()).get("title"));
@@ -87,7 +84,7 @@ public class SearchTermService {
     }
 
     private void handleException(String message, Exception e) {
-        // 生产环境应使用日志框架
+        //TODO 生产环境应使用日志框架
         System.err.println(message);
         e.printStackTrace();
     }

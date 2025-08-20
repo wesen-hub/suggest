@@ -36,22 +36,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-            <version>2023.0.0.0-RC1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-            <version>4.2.0</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-            <version>2023.0.0.0-RC1</version>
-        </dependency>
         <!-- Elasticsearch 依赖 -->
 
             <dependency>
@@ -80,11 +65,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.22</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
-            <version>2.3.0</version> <!-- 与 Spring Cloud Alibaba 2023.0.3.1 兼容 -->
-        </dependency>
+            <version>2.3.0</version> &lt;!&ndash; 与 Spring Cloud Alibaba 2023.0.3.1 兼容 &ndash;&gt;
+        </dependency>-->
         <!-- JSON 序列化依赖 -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -95,6 +80,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
 
     </dependencies>
 

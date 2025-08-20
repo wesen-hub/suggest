@@ -31,28 +31,28 @@ public class DocController {
     }
 
     //添加completionindex 数据
-@RequestMapping("/addCompletion")
-public String insertCompletionProduct(String filePath) {
-    try{
-        docService.bulkInsertFromFile(filePath);
-    }catch (Exception e){
-        e.printStackTrace();
-        return "add completion failed";
-    }
-    return "add completion success";
-}
-
-//添加中缀补全数据
-@RequestMapping("/addInfix")
-public String insertInfixProduct(String term) {
+    @RequestMapping("/addCompletion")
+    public String insertCompletionProduct(String filePath) {
         try{
-            searchTermService.upsertTermWeight(term);
-            return "add product success";
+            docService.bulkInsertFromFile(filePath);
         }catch (Exception e){
             e.printStackTrace();
-            return e.getMessage();
+            return "add completion failed";
         }
-}
+        return "add completion success";
+    }
+
+    //添加中缀补全数据
+    @RequestMapping("/addInfix")
+    public String insertInfixProduct(String term) {
+            try{
+                searchTermService.upsertTermWeight(term);
+                return "add product success";
+            }catch (Exception e){
+                e.printStackTrace();
+                return e.getMessage();
+            }
+    }
 
     //删除数据
     @RequestMapping("/delete")

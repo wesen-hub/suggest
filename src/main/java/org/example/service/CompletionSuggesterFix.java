@@ -11,7 +11,6 @@ import org.example.vo.TermSuggestVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ public class CompletionSuggesterFix {
     //搜索自动补全建议
     //对输入的查询词,先进行前缀匹配,如果前缀匹配有结果,则进行中缀匹配后返回,如果前缀匹配没有结果,则进行纠错匹配,将纠错匹配的
 
-    public List<TermSuggestVO> completionSuggest(String index, String field, String text) {
+    public List<TermSuggestVO> completionSuggest(String index, String field, String text) throws IOException {
         SearchRequest request1 = SearchRequest.of(sr -> sr
                 .index(index)
                 .suggest(sb -> sb
@@ -42,6 +41,7 @@ public class CompletionSuggesterFix {
         );
         SearchResponse<?> response = null;
         try {
+            System.out.println("前缀匹配DSL:  ");
             response = client.search(request1, Object.class);
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,7 +52,6 @@ public class CompletionSuggesterFix {
         }
         return parseSuggest(response);
     }
-
     //解析response
     public List<TermSuggestVO> parseSuggest(SearchResponse<?> response) {
         List<TermSuggestVO> resultList = new ArrayList<>();
@@ -67,7 +66,6 @@ public class CompletionSuggesterFix {
                 }
             }
         }
-
         // 5. 按 score 降序排序
         return resultList.stream()
                 .sorted((o1, o2) -> Double.compare(o2.getScore(), o1.getScore()))
@@ -152,9 +150,8 @@ public class CompletionSuggesterFix {
         //按得分降序排序,并返回
         return termSuggestVOList.stream().sorted((o1, o2) -> Double.compare(o2.getScore(), o1.getScore())).collect(Collectors.toList());
     }
-
     //拼音查询,接受多个词查询
-//ToDo 最长不超过十个
+    //ToDo 最长不超过十个
     public List<TermSuggestVO> pinyinSuggest(String index, String field, String subField, List<String> text) throws Exception {
         //循环构建query
         List<Query>queries=new ArrayList<>();
@@ -178,6 +175,7 @@ public class CompletionSuggesterFix {
                 .query(boolQuery)
         );
         SearchResponse<Object> response = client.search(request, Object.class);
+
         //声明一个List集合
         List<TermSuggestVO> termSuggestVOList = new ArrayList<>();
         //判空
@@ -185,7 +183,6 @@ public class CompletionSuggesterFix {
             return null;
         }
         for (Hit<Object> hit : response.hits().hits()) {
-
             //获取文档中的字段值
             LinkedHashMap<String, Object> source = (LinkedHashMap<String, Object>) hit.source();
             TermSuggestVO termSuggestVO = new TermSuggestVO();
@@ -263,9 +260,6 @@ public class CompletionSuggesterFix {
         BoolQuery boolQuery = QueryBuilders.bool()
                 .should(queries)
                 .build();
-
-
-
         SearchRequest request = SearchRequest.of(s -> s
                 .index(index)
                 .query(boolQuery._toQuery())
@@ -293,6 +287,7 @@ public class CompletionSuggesterFix {
             //添加到集合中
             termSuggestVOList.add(termSuggestVO);
         }
+
         //按得分降序排序,并返回
         return termSuggestVOList.stream().sorted((o1, o2) -> Double.compare(o2.getScore(), o1.getScore())).collect(Collectors.toList());
     }

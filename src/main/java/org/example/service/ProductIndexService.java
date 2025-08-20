@@ -3,9 +3,7 @@ package org.example.service;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch.core.DeleteByQueryRequest;
 import co.elastic.clients.elasticsearch.core.DeleteByQueryResponse;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.BulkRequest;
@@ -67,6 +65,7 @@ public class ProductIndexService {
 
                 // 构建文档
                 Map<String, Object> doc = new HashMap<>();
+                //添加id
                 doc.put("name", word);
                 doc.put("weight", weight);
 
@@ -93,6 +92,11 @@ public class ProductIndexService {
         }
     }
 
+    /**
+     * 解析权重信息
+     * @param parts 分割后的行数据
+     * @return 权重值，默认为1
+     */
     private int parseWeight(String[] parts) {
         try {
             return (parts.length > 1 && !parts[1].isEmpty()) ?

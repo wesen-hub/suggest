@@ -1,0 +1,48 @@
+services:
+  elasticsearch:
+    image:  docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: elasticsearch_suggest
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - ELASTIC_PASSWORD=your_password  # 设置密码
+    volumes:
+      - ./plugins:/usr/share/elasticsearch/plugins
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - es_elastic_network2
+
+  kibana:
+    image: kibana_arm64:8.13.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    networks:
+      - es_elastic_network2
+    depends_on:
+      - elasticsearch
+
+  suggest-service:
+    image: ubuntu_jdk19:22.04
+    volumes:
+      - /Users/wesen/Desktop/es/:/home/suggest/
+    # command: java -jar /home/suggest/suggest-1.0-SNAPSHOT.jar -f /home/suggest/application.properties
+    working_dir: /home/suggest/  # 明确工作目录
+    command: ["java", "-jar", "suggest-1.0-SNAPSHOT.jar", "-f", "application.properties"]
+    ports:
+      - 8083:8083
+    networks:
+      - es_elastic_network2
+    depends_on:
+      - elasticsearch
+volumes:
+  es_data:
+    driver: local
+
+networks:
+  es_elastic_network2:
+    driver: bridge

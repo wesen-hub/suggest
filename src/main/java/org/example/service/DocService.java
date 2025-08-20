@@ -20,11 +20,11 @@ public class DocService {
     @Autowired
     ElasticsearchClient client;
     final int BATCH_SIZE = 1000;
-    final String INDEX_NAME = "products5";
+    final String INDEX_NAME = "completion_index";
 
 
     @Autowired
-    ProductIndexService productIndexService;
+    TermIndexService termIndexService;
 
     // 文档实体类（与索引映射对齐）
     @Data
@@ -51,6 +51,7 @@ public class DocService {
                 // 解析词条和权重
                 String[] parts = line.split("\\s+");
                 String keyword = parts[0];
+                System.out.println("处理词条: " + keyword);
                 int weight = (parts.length > 1) ? Integer.parseInt(parts[1]) : 1;
 
                 // 生成拼音全拼和首字母

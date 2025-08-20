@@ -13,14 +13,6 @@ public class SuggestController {
     CompletionSuggesterFix completionSuggesterFix;
     @Autowired
     SuggestService suggestService;
-    final String termIndex = "products9";
-    final String termField = "name";
-    final String completionIndex = "products5";
-    final String completionField = "title_suggest";
-    //中缀补全索引名称
-    final String infixIndex = "chinese_search_demo5";
-    //中缀补全字段名称
-    final String infixField = "title";
     //接受查询词,返回提示列表
     @RequestMapping("/suggest")
     public List<String> suggest( String text) throws Exception {

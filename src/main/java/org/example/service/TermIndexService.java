@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class ProductIndexService {
+public class TermIndexService {
 
     private static final int BATCH_SIZE = 1000;  // 批次大小
-    private static final String INDEX_NAME = "products9";
+    private static final String INDEX_NAME = "term_index";
 
     @Autowired
     private ElasticsearchClient esClient;
@@ -38,7 +38,6 @@ public class ProductIndexService {
                     .index(indexName)
                     .query(QueryBuilders.matchAll().build()._toQuery())
             );
-
             // 执行删除操作
             DeleteByQueryResponse response = esClient.deleteByQuery(request);
             return response.deleted() > 0;

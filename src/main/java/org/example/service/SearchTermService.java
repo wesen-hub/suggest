@@ -11,7 +11,7 @@ import java.util.Map;
 @Service
 public class SearchTermService {
 
-    private static final String INDEX_NAME = "chinese_search_demo5";
+    private static final String INDEX_NAME = "infix_index";
     private static final String TERM_FIELD = "title.keyword"; // 使用精确匹配字段
 
     @Autowired

@@ -1,7 +1,3 @@
-# 1. 功能说明
-# 2. 设计说明
-## 1. 索引结构
-```bash
 PUT /completion_index //前缀补全---中文和拼音
 {
   "settings": {
@@ -26,16 +22,13 @@ PUT /completion_index //前缀补全---中文和拼音
   "mappings": {
     "properties": {
       "title_suggest": {
-        "type": "completion",  
-        "analyzer": "pinyin_analyzer"    
+        "type": "completion",
+        "analyzer": "pinyin_analyzer"
       },
       "weight": {"type": "integer"}
     }
   }
 }
-
-
-
 
 PUT /term_index  //纠错--中文和拼音
 {
@@ -73,9 +66,7 @@ PUT /term_index  //纠错--中文和拼音
   }
 }
 
-
-
-PUT /infix_index
+PUT /infix_index  //中缀补全--中文和拼音
 {
   "settings": {
     "analysis": {
@@ -106,6 +97,3 @@ PUT /infix_index
     }
   }
 }
-
-```
-# 3. 使用说明

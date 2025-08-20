@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import org.example.service.DocService;
-import org.example.service.ProductIndexService;
+import org.example.service.TermIndexService;
 import org.example.service.SearchTermService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DocController {
 
     @Autowired
-    ProductIndexService productIndexService;
+    TermIndexService termIndexService;
     @Autowired
     DocService docService;
 
@@ -22,7 +22,7 @@ public class DocController {
     @RequestMapping("/addTerm")
     public String insertProduct(String filePath) {
         try{
-            productIndexService.termIndexWordsFromFile(filePath);
+            termIndexService.termIndexWordsFromFile(filePath);
         }catch (Exception e){
             e.printStackTrace();
             return "add product failed";
@@ -58,7 +58,7 @@ public class DocController {
     @RequestMapping("/delete")
     public String deleteProduct(String index) {
         try{
-            productIndexService.deleteAllDocuments(index);
+            termIndexService.deleteAllDocuments(index);
         }catch (Exception e){
             e.printStackTrace();
             return "delete product failed";

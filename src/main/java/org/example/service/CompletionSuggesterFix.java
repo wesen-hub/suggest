@@ -41,7 +41,8 @@ public class CompletionSuggesterFix {
         );
         SearchResponse<?> response = null;
         try {
-            System.out.println("前缀匹配DSL:  ");
+            //打印最终的DSL
+            System.out.println("前缀补全DSL: "+request1.toString());
             response = client.search(request1, Object.class);
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,13 +81,15 @@ public class CompletionSuggesterFix {
                                 .text(text)
                                 .term(t -> t
                                         .field(field)
-                                        .suggestMode(SuggestMode.Missing)  // 对应 suggest_mode: "always"
-                                        .prefixLength(1)                  // 设置 prefix_length: 0
+                                        .suggestMode(SuggestMode.Always)  // 对应 suggest_mode: "always"
+                                        .prefixLength(0)                  // 设置 prefix_length: 0
                                         .minWordLength(1)                // 设置 min_word_length: 1
                                 )
                         )
                 )
         );
+        //打印最终的DSL
+        System.out.println("纠错补全DSL: "+request.toString());
         SearchResponse<?> response = client.search(request, Object.class);
         if (response.suggest() == null) {
             return null;
@@ -113,6 +116,8 @@ public class CompletionSuggesterFix {
         );
         SearchResponse<Object> response = null;
         try {
+            //打印最终的DSL
+            System.out.println("拼音查询DSL: "+request.toString());
             response = client.search(request, Object.class);
         } catch (IOException e) {
             e.printStackTrace();
@@ -174,6 +179,8 @@ public class CompletionSuggesterFix {
                 .index(index)
                 .query(boolQuery)
         );
+        //打印最终的DSL
+        System.out.println("拼音查询DSL: "+request.toString());
         SearchResponse<Object> response = client.search(request, Object.class);
 
         //声明一个List集合
@@ -216,7 +223,8 @@ public class CompletionSuggesterFix {
                 .index(index)
                 .query(q -> q.matchBoolPrefix(matchBoolPrefixQuery))
         );
-
+        //打印最终的DSL
+        System.out.println("中缀查询DSL: "+searchRequest.toString());
         SearchResponse<Object> response = client.search(searchRequest, Object.class);
 
         //声明一个List集合
@@ -264,6 +272,8 @@ public class CompletionSuggesterFix {
                 .index(index)
                 .query(boolQuery._toQuery())
         );
+        //打印最终的DSL
+        System.out.println("中缀查询DSL: "+request.toString());
         SearchResponse<Object> response = client.search(request, Object.class);
         //声明一个List集合
         List<TermSuggestVO> termSuggestVOList = new ArrayList<>();

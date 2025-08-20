@@ -2,7 +2,7 @@ package org.example.task;
 
 import jakarta.annotation.PostConstruct;
 import org.example.service.DocService;
-import org.example.service.ProductIndexService;
+import org.example.service.TermIndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class SyncWortask {
     @Autowired
     DocService docService;
     @Autowired
-    ProductIndexService productIndexService;
+    TermIndexService termIndexService;
 
     @Value("${productIndex.filePath}")
     private String product_docPath;
@@ -26,10 +26,10 @@ public class SyncWortask {
     public void sync(){
         try {
             System.out.println("删除索引中的旧数据...");
-            productIndexService.deleteAllDocuments("products9");
-            productIndexService.deleteAllDocuments("products5");
+            termIndexService.deleteAllDocuments("term_index");
+            termIndexService.deleteAllDocuments("completion_index");
             System.out.println("开始同步词库到索引...");
-            productIndexService.termIndexWordsFromFile(product_docPath);
+            termIndexService.termIndexWordsFromFile(product_docPath);
             docService.bulkInsertFromFile(docPath);
             System.out.println("词库同步完成");
         } catch (Exception e) {

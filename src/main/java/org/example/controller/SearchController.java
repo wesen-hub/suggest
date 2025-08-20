@@ -29,9 +29,9 @@ public class SearchController {
     //termSuggest方法
     // 示例：查询自动补全建议
     @PostMapping ("/completionSuggest")
-    public List<String> termSuggest(String index, String field, String text) throws Exception {
+    public List<String> termSuggest( String field, String text) throws Exception {
         //调用completionSuggesterFix的termSuggest方法
-        List<TermSuggestVO> termSuggest = completionSuggesterFix.completionSuggest(index, field, text);
+        List<TermSuggestVO> termSuggest = completionSuggesterFix.completionSuggest("completion_index", field, text);
 
         //判空
         if (termSuggest == null) {
@@ -48,9 +48,9 @@ public class SearchController {
 
     // 示例：查询纠错建议
     @PostMapping ("/termSuggestDoc")
-    public List<String> termSuggestDoc(String index, String field, String text) throws Exception {
+    public List<String> termSuggestDoc( String field, String text) throws Exception {
         //调用completionSuggesterFix的termSuggestDoc方法
-        List<TermSuggestVO> termSuggest = completionSuggesterFix.termSuggestDoc(index, field, text);
+        List<TermSuggestVO> termSuggest = completionSuggesterFix.termSuggestDoc("term_index", field, text);
 
         //判空
         if (termSuggest == null) {
@@ -68,9 +68,9 @@ public class SearchController {
 
     // 示例：拼音查询建议
     @PostMapping ("/pinyinSuggest")
-    public List<String> pinyinSuggest(String index, String field,String subField, String text) throws Exception {
+    public List<String> pinyinSuggest( String field,String subField, String text) throws Exception {
         //调用completionSuggesterFix的pinyinSuggest方法
-        List<TermSuggestVO> termSuggest = completionSuggesterFix.pinyinSuggest(index, field,subField, text);
+        List<TermSuggestVO> termSuggest = completionSuggesterFix.pinyinSuggest("term_index",field,subField, text);
 
         //判空
         if (termSuggest == null) {
@@ -89,9 +89,9 @@ public class SearchController {
 
     //中缀查询
     @PostMapping ("/infixSuggest")
-    public List<String> infixSuggest(String index, String field, String text) throws Exception {
+    public List<String> infixSuggest( String field, String text) throws Exception {
         //调用completionSuggesterFix的infixSuggest方法
-        List<TermSuggestVO> termSuggest = completionSuggesterFix.infixSuggest(index, field, text);
+        List<TermSuggestVO> termSuggest = completionSuggesterFix.infixSuggest("infix_index", field, text);
 
         //判空
         if (termSuggest == null) {

@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # Elasticsearch 服务节点
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0  # 使用官方 ES 8.13.0 镜像
+    container_name: elasticsearch_suggest
+    environment:
+      - discovery.type=single-node      # 单节点模式，适合开发和测试
+      - xpack.security.enabled=false    # 禁用安全特性，简化开发环境配置
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g      # 设置 JVM 堆内存大小为 1GB(根据实际情况修改)
+      - ELASTIC_PASSWORD=your_password  # 设置 Elasticsearch 密码
+    volumes:
+      - ./plugins:/usr/share/elasticsearch/plugins  # 挂载插件目录
+      - es_data:/usr/share/elasticsearch/data       # 使用命名卷持久化数据
+    ports:
+      - 9200:9200  # 暴露 Elasticsearch HTTP API 端口
+    networks:
+      - es_elastic_network2
+
+  # 搜索提示服务
+  suggest-service:
+    image: openjdk:19 # 使用官方 JDK 19+ 镜像
+    container_name: suggest_service
+    volumes:
+      - ./app/:/home/suggest/   # 挂载包含应用程序文件的主机目录到容器工作目录
+    working_dir: /home/suggest/  # 设置工作目录
+    command: ["java", "-jar", "suggest-1.0-SNAPSHOT.jar", "-f", "application.properties"]
+    ports:
+      - 8080:8080  # 暴露应用服务端口
+    networks:
+      - es_elastic_network2
+    depends_on:
+      - elasticsearch  # 确保在 Elasticsearch 之后启动
+
+  # Kibana 可视化界面(可选)
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.0  # 使用官方 Kibana 8.13.0 镜像
+    container_name: kibana_suggest
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200  # 连接到 Elasticsearch 服务
+    ports:
+      - 5601:5601  # 暴露 Kibana Web 界面端口
+    networks:
+      - es_elastic_network2
+    depends_on:
+      - elasticsearch  # 确保在 Elasticsearch 之后启动
+
+# 定义数据卷
+volumes:
+  es_data:
+    driver: local  # 使用本地驱动存储 Elasticsearch 数据
+
+# 定义网络
+networks:
+  es_elastic_network2:
+    driver: bridge  # 使用桥接网络模式

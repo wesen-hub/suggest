@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.service.CompletionSuggesterFix;
+import org.example.service.SearchService;
 import org.example.service.SuggestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +10,7 @@ import java.util.List;
 @RequestMapping("/suggest")
 public class SuggestController {
     @Autowired
-    CompletionSuggesterFix completionSuggesterFix;
+    SearchService searchService;
     @Autowired
     SuggestService suggestService;
     //接受查询词,返回提示列表

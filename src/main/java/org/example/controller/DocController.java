@@ -1,8 +1,8 @@
 package org.example.controller;
 
-import org.example.service.DocService;
+import org.example.service.CompletionIndexService;
 import org.example.service.TermIndexService;
-import org.example.service.SearchTermService;
+import org.example.service.InfixIndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,10 +14,10 @@ public class DocController {
     @Autowired
     TermIndexService termIndexService;
     @Autowired
-    DocService docService;
+    CompletionIndexService completionIndexService;
 
     @Autowired
-    SearchTermService searchTermService;
+    InfixIndexService infixIndexService;
     //添加数据
     @RequestMapping("/addTerm")
     public String insertProduct(String filePath) {
@@ -34,7 +34,7 @@ public class DocController {
     @RequestMapping("/addCompletion")
     public String insertCompletionProduct(String filePath) {
         try{
-            docService.bulkInsertFromFile(filePath);
+            completionIndexService.completionIndexWordsFromFile(filePath);
         }catch (Exception e){
             e.printStackTrace();
             return "add completion failed";
@@ -46,7 +46,7 @@ public class DocController {
     @RequestMapping("/addInfix")
     public String insertInfixProduct(String term) {
             try{
-                searchTermService.upsertTermWeight(term);
+                infixIndexService.upsertTermWeight(term);
                 return "add product success";
             }catch (Exception e){
                 e.printStackTrace();

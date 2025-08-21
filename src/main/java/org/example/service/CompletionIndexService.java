@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DocService {
+public class CompletionIndexService {
     @Autowired
     ElasticsearchClient client;
     final int BATCH_SIZE = 1000;
@@ -30,19 +30,21 @@ public class DocService {
     @Data
     @AllArgsConstructor
     public static class SuggestDoc {
-        private TitleSuggest title_suggest;
+        private CompletionWords completionWords;
         private Integer weight;
     }
 
     @Data
     @AllArgsConstructor
-    public static class TitleSuggest {
+    public static class CompletionWords {
+        //`input`是必须的顶级字段名，无法更改
+        //input 数组包含了所有能触发这条建议的前缀
         private List<String> input;
         private Integer weight;
     }
 
     @SneakyThrows
-    public void bulkInsertFromFile(String filePath) {
+    public void completionIndexWordsFromFile(String filePath) {
         System.out.println("开始从文件导入词条索引: " + filePath);
         List<BulkOperation> operations = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -63,7 +65,7 @@ public class DocService {
 
                 // 创建文档对象
                 SuggestDoc doc = new SuggestDoc(
-                        new TitleSuggest(inputs, weight),
+                        new CompletionWords(inputs, weight),
                         weight
                 );
 

@@ -9,16 +9,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
-public class SearchTermService {
+public class InfixIndexService {
 
     private static final String INDEX_NAME = "infix_index";
-    private static final String TERM_FIELD = "title.keyword"; // 使用精确匹配字段
+    private static final String TERM_FIELD = "infixWords.keyword"; // 使用精确匹配字段
 
     @Autowired
     ElasticsearchClient esClient;
 
     /**
-     * 更新或插入词条权重
+     * 更新或插入词条权重--如果词条已存在，则权重+1；如果不存在，则创建新词条并设置初始权重为1。
      * @param term 要处理的词条
      * @return 操作是否成功
      */
@@ -38,7 +38,7 @@ public class SearchTermService {
             SearchResponse<?> response = esClient.search(searchRequest, Map.class);
             if(response.hits().total().value() > 0&&response.hits().hits().size()==1) {
                 response.hits().hits().stream().forEach(hit -> {
-                    System.out.println(((LinkedHashMap<String,Object>)hit.source()).get("title"));
+                    System.out.println(((LinkedHashMap<String,Object>)hit.source()).get("infixWords"));
                 });
                 return handleExistingTerm(term);
             } else {
@@ -69,7 +69,7 @@ public class SearchTermService {
                 .index(INDEX_NAME)
                 .id(getDocumentId(term))
                 .document(Map.of(
-                        "title", term,
+                        "infixWords", term,
                         "weight", 1
                 ))
         );
@@ -78,7 +78,7 @@ public class SearchTermService {
 
     // 获取文档ID的策略（根据需求调整）
     private String getDocumentId(String term) {
-        System.out.println("term:"+term+" hash:"+term.hashCode());
+        System.out.println("term: "+term+" hash: "+term.hashCode());
         // 示例：使用term的hash作为ID，实际应根据业务需求设计
         return String.valueOf(term.hashCode());
     }

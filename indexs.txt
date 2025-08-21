@@ -21,7 +21,7 @@ PUT /completion_index //前缀补全---中文和拼音
   },
   "mappings": {
     "properties": {
-      "title_suggest": {
+      "completionWords": {
         "type": "completion",
         "analyzer": "pinyin_analyzer"
       },
@@ -52,7 +52,7 @@ PUT /term_index  //纠错--中文和拼音
   },
   "mappings": {
     "properties": {
-      "name": {
+      "termWords": {
         "type": "text",
         "analyzer": "pinyin_analyzer",    // 应用拼音分词
         "fields": {
@@ -82,7 +82,7 @@ PUT /infix_index  //中缀补全--中文和拼音
   },
   "mappings": {
     "properties": {
-      "title": {
+      "infixWords": {
         "type": "search_as_you_type",  // 主字段
         "analyzer": "ik_max_syno",     // 细粒度分词+同义词
         "search_analyzer": "ik_max_syno",  // 搜索时智能分词

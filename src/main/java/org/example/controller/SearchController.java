@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import org.example.service.CompletionSuggesterFix;
+import org.example.service.SearchService;
 import org.example.vo.TermSuggestVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class SearchController {
     @Autowired
     ElasticsearchClient esClient;
     @Autowired
-    CompletionSuggesterFix completionSuggesterFix;
+    SearchService searchService;
 
     // 示例：查询索引信息
     @GetMapping("/indices")
@@ -31,7 +31,7 @@ public class SearchController {
     @PostMapping ("/completionSuggest")
     public List<String> termSuggest( String field, String text) throws Exception {
         //调用completionSuggesterFix的termSuggest方法
-        List<TermSuggestVO> termSuggest = completionSuggesterFix.completionSuggest("completion_index", field, text);
+        List<TermSuggestVO> termSuggest = searchService.completionSuggest("completion_index", field, text);
 
         //判空
         if (termSuggest == null) {
@@ -50,7 +50,7 @@ public class SearchController {
     @PostMapping ("/termSuggestDoc")
     public List<String> termSuggestDoc( String field, String text) throws Exception {
         //调用completionSuggesterFix的termSuggestDoc方法
-        List<TermSuggestVO> termSuggest = completionSuggesterFix.termSuggestDoc("term_index", field, text);
+        List<TermSuggestVO> termSuggest = searchService.termSuggestDoc("term_index", field, text);
 
         //判空
         if (termSuggest == null) {
@@ -70,7 +70,7 @@ public class SearchController {
     @PostMapping ("/pinyinSuggest")
     public List<String> pinyinSuggest( String field,String subField, String text) throws Exception {
         //调用completionSuggesterFix的pinyinSuggest方法
-        List<TermSuggestVO> termSuggest = completionSuggesterFix.pinyinSuggest("term_index",field,subField, text);
+        List<TermSuggestVO> termSuggest = searchService.pinyinSuggest("term_index",field,subField, text);
 
         //判空
         if (termSuggest == null) {
@@ -91,7 +91,7 @@ public class SearchController {
     @PostMapping ("/infixSuggest")
     public List<String> infixSuggest( String field, String text) throws Exception {
         //调用completionSuggesterFix的infixSuggest方法
-        List<TermSuggestVO> termSuggest = completionSuggesterFix.infixSuggest("infix_index", field, text);
+        List<TermSuggestVO> termSuggest = searchService.infixSuggest("infix_index", field, text);
 
         //判空
         if (termSuggest == null) {

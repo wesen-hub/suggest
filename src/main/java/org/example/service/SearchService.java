@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class CompletionSuggesterFix {
+public class SearchService {
     @Autowired
     ElasticsearchClient client;
 
@@ -61,7 +61,7 @@ public class CompletionSuggesterFix {
             for (Suggestion<?> suggestion : suggestions) {
                 List<? extends CompletionSuggestOption<?>> options = suggestion.completion().options();
                 for (CompletionSuggestOption option : options) {
-                    String inputFirst = ((List<String>)((Map<String,Object>)((LinkedHashMap<String,Object>)option.source()).get("title_suggest")).get("input")).get(0);
+                    String inputFirst = ((List<String>)((Map<String,Object>)((LinkedHashMap<String,Object>)option.source()).get("completionWords")).get("input")).get(0);
                     TermSuggestVO termSuggestVO = new TermSuggestVO(option.score(), inputFirst);
                     resultList.add(termSuggestVO);
                 }
